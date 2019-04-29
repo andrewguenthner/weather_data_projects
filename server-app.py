@@ -45,8 +45,8 @@ def welcome():
         f'/api/v1.0/precipitation -- returns final 12 months of precip data as JSON dict<br/>'
         f'/api/v1.0/station -- returns a JSON list of stations<br/>'
         f'/api/v1.0/tobs -- returns JSON list of final 12 months of temperature data <br/>'
-        f'/api/v1.0/<start> -- returns JSON list of temperature data for all dates after <start><br/>'
-        f'/api/v1.0/<start>/<end> -- returns JSON list of temperatures for all dates from <start> to <end><br/>'
+        f'/api/v1.0/start -- returns JSON list of temperature data for all dates after <start><br/>'
+        f'/api/v1.0/start/end -- returns JSON list of temperatures for all dates from <start> to <end><br/>'
         f'Note that dates must be supplied in YYYY-MM-DD format'
     )
 
@@ -81,8 +81,8 @@ def dict_precip():
 
 @app.route('/api/v1.0/station')
 def list_stations():
-   '''Return a JSON list of stations'''
-   # Query the station table
+    '''Return a JSON list of stations'''
+    # Query the station table
     station_results = session.query(Station.station).distinct().all()
     # Build list
     station_list = [i[0] for i in station_results]  
@@ -117,7 +117,8 @@ def dict_tobs():
     return jsonify(station_dict)
 
 @app.route('/api/v1.0/<start>')
-def list_key_temp_obs_start(start)
+def list_key_temp_obs_start(start):
+    '''Returns key temperature observations (min, max, average) after given start date'''
     # Return data from query
     obs_results = session.query(Measurement.station,func.min(Measurement.tobs),func.max(Measurement.tobs),func.avg(Measurement.tobs)).\
                                         filter(Measurement.date >= start).group_by(Measurement.station)
@@ -127,8 +128,8 @@ def list_key_temp_obs_start(start)
     return jsonify(obs_list)
 
 @app.route('/api/v1.0/<start>/<end>')
-def list_key_temp_obs_start(start, end)
-
+def list_key_temp_obs_start_end(start, end):
+    '''Return key temperature observations (min, max, and average) for given start, end date range'''
     # Reutrn data from query
     obs_results = session.query(Measurement.station,func.min(Measurement.tobs),func.max(Measurement.tobs),func.avg(Measurement.tobs)).\
                                        filter(and_(Measurement.date >= start, Measurement.date <= end)).\
