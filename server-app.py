@@ -1,4 +1,3 @@
-import numpy as np
 import datetime as dt
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -45,9 +44,9 @@ def welcome():
         f'/api/v1.0/precipitation -- returns final 12 months of precip data as JSON dict<br/>'
         f'/api/v1.0/station -- returns a JSON list of stations<br/>'
         f'/api/v1.0/tobs -- returns JSON list of final 12 months of temperature data <br/>'
-        f'/api/v1.0/start -- returns JSON list of temperature data for all dates after <start><br/>'
-        f'/api/v1.0/start/end -- returns JSON list of temperatures for all dates from <start> to <end><br/>'
-        f'Note that dates must be supplied in YYYY-MM-DD format'
+        f'/api/v1.0/start -- returns JSON list of temperature data for all dates after start<br/>'
+        f'/api/v1.0/start/end -- returns JSON list of temperatures for all dates from start to end<br/>'
+        f'Note that start and end are variables to be replaced with dates supplied in YYYY-MM-DD format'
     )
 
 
@@ -140,4 +139,4 @@ def list_key_temp_obs_start_end(start, end):
     return jsonify(obs_list)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=False)
